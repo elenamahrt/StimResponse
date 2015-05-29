@@ -201,7 +201,20 @@ class  Signal_Distort:
         fir_coeff = firwin(numtaps, cutoff_hz/nyq_rate, pass_zero=False)
         # Use lfilter to filter the signal with the FIR filter
         return lfilter(fir_coeff, 1.0, signal)
-    
+
+    def rm_clicks(self, signal, rmDur):
+        """ Remove clicks at beginning of stimulus files.
+        :param self:
+        :type self:
+        :param signal: Signal
+        :type signal: numpy array
+        :param rmDur: amount of time (ms) in file you want to remove
+        :type rmDur: int
+        """
+        numPoints = (rmDur/1000)*self.Fs #number of points to remove 
+        signal[:numPoints] = 0 #replace the numPoints with 0's
+        return signal #it is good practice to return your things (but is not always necessary)
+
     def DistortionProducts(self, signal, reverbShift=1., reverbTau=1., echos=5, distortFactor=4.):
         """ Generate distortions to reverberated signal.
         :param signal: Signal
