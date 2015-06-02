@@ -211,9 +211,11 @@ class  Signal_Distort:
         :param rmDur: amount of time (ms) in file you want to remove
         :type rmDur: int
         """
-        numPoints = (rmDur/1000)*self.Fs #number of points to remove 
+        assert self.Fs == 333000
+        numPoints = (rmDur/1000.0)*self.Fs #number of points to remove 
         signal[:numPoints] = 0 #replace the numPoints with 0's
         return signal #it is good practice to return your things (but is not always necessary)
+
 
     def DistortionProducts(self, signal, reverbShift=1., reverbTau=1., echos=5, distortFactor=4.):
         """ Generate distortions to reverberated signal.
@@ -232,7 +234,6 @@ class  Signal_Distort:
         tau = reverbTau
         N = echos
         sigReverb = self.signalReverb(signal, shift, tau, N)
-
         resampleFactor = 4.
         sigReverb = resample(sigReverb, resampleFactor*len(sigReverb))
         self.Fs = resampleFactor*self.Fs
